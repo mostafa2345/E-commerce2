@@ -59,7 +59,7 @@ userSchema.methods.comparePassword = async function (password) {
 };
 
 // Index for email
-userSchema.index({ email: 1 }, { unique: true });
+
 
 const User = mongoose.model("User", userSchema);
 export default User;

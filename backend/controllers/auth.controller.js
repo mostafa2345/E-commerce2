@@ -68,7 +68,7 @@ export const registerController=async(req,res)=>{
 // In your auth.controller.js
 export const loginController = async (req, res) => {
   try {
-	await connectDB()
+
     const { email, password } = req.body;
 
     // Fetch user directly
