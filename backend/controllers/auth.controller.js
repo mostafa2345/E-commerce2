@@ -87,8 +87,7 @@ try {
   
 } catch (error) {
 	log('Error in login controller:', error.message)
-	res.status(500).json('internal server error',error.message)
-	
+	res.status(500).json({ message: `Internal server error: ${error.message}` })
 }
 }
 export const logOutController=async(req,res)=>{
