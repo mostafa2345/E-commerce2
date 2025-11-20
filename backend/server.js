@@ -1,6 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import { connectDB } from './lib/db.js'
+import dbConnect from './lib/db.js'
 import authRoutes from '../backend/routes/auth.route.js'
 import productRoutes from '../backend/routes/product.route.js'
 import cartRoutes from '../backend/routes/cart.route.js'
@@ -29,5 +29,5 @@ app.use('/api/analytics',analyticsRoutes)
 
 app.listen(PORT,()=>{
     log(`Server is running on port ${PORT}`)
-    connectDB()
+    dbConnect()
 })
