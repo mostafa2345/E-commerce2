@@ -24,6 +24,13 @@ const FeaturedProducts = ({ featuredProducts }) => {
       }
     ]
   };
+    if (!Array.isArray(featuredProducts) || featuredProducts.length === 0) {
+        return (
+            <div className="py-12 container mx-auto px-4 text-center">
+                <p>No featured products available at the moment.</p>
+            </div>
+        )
+    }
 
   return (
     <div className="py-12 container mx-auto px-4">
