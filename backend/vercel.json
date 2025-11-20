@@ -23,10 +23,6 @@
     "STRIPE_PK": "@stripe-pk",
     "STRIPE_SK": "@stripe-sk",
     "CLIENT_URL": "@client-url"
-  },
-  "functions": {
-  "api/index.js": {
-    "maxDuration": 30
   }
-}
+ 
 }
