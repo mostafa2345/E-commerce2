@@ -37,7 +37,7 @@ role:{
 }
 },{
     timestamps:true
-})
+},{ bufferCommands: false })
 
 
 userSchema.pre('validate',async function (next) {
