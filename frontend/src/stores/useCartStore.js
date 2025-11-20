@@ -45,15 +45,27 @@ export const useCartStore=create((set,get)=>({
 
 
 
-    getCartItems:async()=>{
+    getCartItems: async () => {
         try {
-            const res=await axios.get('/cart')
-            log('Fetched cart items:', res.data.length, 'items')
-            set({cart:res.data})
-             get().calcTotals()
+            const res = await axios.get('/cart')
+            // Ensure we have a valid response with data
+            if (res.data) {
+                // Make sure we're setting an array, even if it's empty
+                const cartItems = Array.isArray(res.data) ? res.data : []
+                log('Fetched cart items:', cartItems.length, 'items')
+                set({ cart: cartItems })
+                get().calcTotals()
+            } else {
+                // If no data, set empty array
+                set({ cart: [] })
+            }
         } catch (error) {
-            set({cart:[]})
-            toast.error(error.response.data.message||'An error occured')
+            console.error('Error fetching cart items:', error)
+            // Set empty cart on error
+            set({ cart: [] })
+            // Only show error toast if we have a response with message
+            const errorMessage = error.response?.data?.message || 'Failed to load cart items'
+            toast.error(errorMessage)
         }
     },
 
