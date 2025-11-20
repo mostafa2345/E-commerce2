@@ -1,3 +1,4 @@
+import dbConnect from '../lib/db.js'
 import { stripe } from '../lib/stripe.js'
 import Coupon from '../models/coupon.model.js'
 import Order from '../models/order.model.js'
@@ -7,6 +8,7 @@ import { log } from '../utils/logger.js'
 
 export const createCheckoutSession = async (req, res) => {
     try {
+        	await dbConnect()
         const { products, couponCode } = req.body
 
         if (!Array.isArray(products) || products.length === 0) {
@@ -76,6 +78,7 @@ const{sessionId}=req.body
     return res.status(400).json({ error: 'Invalid sessionId' });
   }
 try {
+    	await dbConnect()
     const session=await stripe.checkout.sessions.retrieve(sessionId)
 
 if(session.payment_status==='paid'){
@@ -156,6 +159,7 @@ async function createStripeCoupon(discountPercentage) {
     
 }
 async function createNewCoupon(userId) {
+    	await dbConnect()
     await Coupon.findOneAndDelete({userId})
     const newCoupon=new Coupon({
         code:'gift'+Math.random().toString(36).substring(2,8).toUpperCase(),

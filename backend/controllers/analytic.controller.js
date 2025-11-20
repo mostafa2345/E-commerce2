@@ -2,10 +2,12 @@ import Order from "../models/order.model.js"
 import Product from "../models/product.model.js"
 import { log } from '../utils/logger.js'
 import User from "../models/user.model.js"
+import dbConnect from "../lib/db.js"
 
 export const getAnalyticsData=async()=>{
 
     try {
+        	await dbConnect()
             const totaUsers=await User.countDocuments()
     const totaProducts=await Product.countDocuments()
 
@@ -35,6 +37,7 @@ return {
 }
 
 export const getDailySalesData=async(startDate,endDate)=>{
+    	await dbConnect()
     const dailySalesData=await Order.aggregate([
         {
             $match:{

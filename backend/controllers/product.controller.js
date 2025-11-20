@@ -2,9 +2,11 @@ import { redis } from "../lib/redis.js"
 import Product from "../models/product.model.js"
 import cloudinary from "../lib/cloudinary.js"
 import { log } from '../utils/logger.js'
+import dbConnect from "../lib/db.js"
 
 export const getAllProducts=async(req,res)=>{
 try {
+    	await dbConnect()
     const products=await Product.find()
     res.status(200).json(products)
 } catch (error) {
@@ -19,6 +21,7 @@ try {
 
 export const getFeaturedProducts=async(req,res)=>{
     try {
+        	await dbConnect()
       let featuredProducts=  await redis.get('featuredProducts')
       if(featuredProducts){
         return res.json(JSON.parse(featuredProducts))
@@ -38,6 +41,7 @@ export const getFeaturedProducts=async(req,res)=>{
 }
 export const createProduct = async (req, res) => {
 	try {
+        	await dbConnect()
 		const { name, description, price, image, category } = req.body;
 
 		let cloudinaryResponse = null;
@@ -62,6 +66,7 @@ export const createProduct = async (req, res) => {
 };
 export const deleteProduct=async(req,res)=>{
     try {
+        	await dbConnect()
         const {id}=req.params
       const product=await Product.findById(id)
         if(!product){
@@ -92,6 +97,7 @@ export const deleteProduct=async(req,res)=>{
 }
 export const getRecommendedProducts=async(req,res)=>{
     try {
+        	await dbConnect()
         const products=await Product.aggregate([
             {
                 $sample:{size:3}
@@ -117,6 +123,7 @@ export const getRecommendedProducts=async(req,res)=>{
 export const getProductsByCategory=async(req,res)=>{
 const {category}=req.params
 try {
+    	await dbConnect()
     const products=await Product.find({category})
     if(!products){
         return res.status(404).json({message:'No products found'})
@@ -131,7 +138,7 @@ try {
 }
 export const toggleFeaturedProduct=async(req,res)=>{
     try {
-
+	await dbConnect()
       const  product= await Product.findById(req.params.id)
       if(product){
         product.isFeatured=!product.isFeatured
@@ -153,6 +160,7 @@ export const toggleFeaturedProduct=async(req,res)=>{
 }
 async function updateFeaturedProductsCache() {
     try {
+        	await dbConnect()
         const featuredProducts=await Product.find({isFeatured:true}).lean()
         if(featuredProducts){
             await redis.set('featuredProducts',JSON.stringify(featuredProducts))

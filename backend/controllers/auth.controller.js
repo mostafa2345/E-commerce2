@@ -39,6 +39,7 @@ const setCookies = (res, accessToken, refreshToken) => {
 export const registerController=async(req,res)=>{
  try {
     const {email,password,name}=req.body
+		await dbConnect()
     const userexists=await User.findOne({email})
     if(userexists){
         

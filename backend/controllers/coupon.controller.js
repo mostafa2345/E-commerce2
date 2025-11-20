@@ -1,8 +1,10 @@
+import dbConnect from "../lib/db.js"
 import Coupon from "../models/coupon.model.js"
 import { log } from "../utils/logger.js"
 
 export const getCoupon=async(req,res)=>{
     try {
+        	await dbConnect()
         const coupon=await Coupon.findOne({userId:req.user._id,isActive:true})
 
         res.json(coupon||null)
@@ -13,6 +15,7 @@ export const getCoupon=async(req,res)=>{
 }
 export const validateCoupon=async(req,res)=>{
     try {
+        	await dbConnect()
         const {code}=req.body
         const coupon =await Coupon.findOne({code:code,userId:req.user._id,isActive:true})
     

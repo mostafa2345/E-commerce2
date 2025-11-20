@@ -1,9 +1,11 @@
 import User from '../models/user.model.js'
 import Product from '../models/product.model.js'
 import { log } from '../utils/logger.js'
+import dbConnect from '../lib/db.js'
 export const addToCart=async(req,res)=>{
 
     try {
+        	await dbConnect()
         const {productId}=req.body
         const user=req.user
 
@@ -23,6 +25,7 @@ export const addToCart=async(req,res)=>{
 }
 export const removeAllFromCart=async(req,res)=>{
     try {
+            await dbConnect()
         const user=req.user
         const {id}=req.params
        
@@ -43,6 +46,7 @@ user.cartItems = user.cartItems.filter(item => item._id.toString() !== id);
 
 export const  updateQuantity=async(req,res)=>{
     try {
+        	await dbConnect()
         const {id:productId}=req.params
         const {quantity}=req.body
         const user=req.user
@@ -69,6 +73,7 @@ export const  updateQuantity=async(req,res)=>{
 }
 export const getCartProducts=async(req,res)=>{
     try {
+        	await dbConnect()
         const user=req.user
    
         const productIds=req.user.cartItems.map(item=>item._id)
