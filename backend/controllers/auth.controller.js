@@ -70,7 +70,7 @@ export const loginController = async (req, res) => {
   try {
 
     const { email, password } = req.body;
-		
+		await connectDB()
     // Fetch user directly
     const user = await User.findOne({ email }).select('+password');
     if (!user) {
