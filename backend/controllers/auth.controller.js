@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import { log } from '../utils/logger.js'
 import { redis } from '../lib/redis.js'
 import Profile from '../models/profile.model.js';
+import { connectDB } from '../lib/db.js';
 
 const generateTokens = (userId) => {
 	const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
@@ -67,6 +68,7 @@ export const registerController=async(req,res)=>{
 // In your auth.controller.js
 export const loginController = async (req, res) => {
   try {
+	await connectDB()
     const { email, password } = req.body;
 
     // Fetch user directly
