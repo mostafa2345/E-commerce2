@@ -1,25 +1,16 @@
 {
   "version": 2,
+  "name": "node-attend-api",
   "builds": [
     {
-      "src": "server.js",
+      "src": "./server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "server.js"
+      "src": "/(.*)",
+      "dest": "/server.js"
     }
-  ],
-  "env": {
-    "DATABASE_URL": "@database_url",
-    "API_KEY": "@api_key"
-  },
-  "functions": {
-    "server.js": {
-      "memory": 512,
-      "maxDuration": 10
-    }
-  }
+  ]
 }
