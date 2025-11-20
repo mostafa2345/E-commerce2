@@ -64,32 +64,55 @@ export const registerController=async(req,res)=>{
     res.status(500).json({message:error.message})
  }
 }
-export const loginController=async(req,res)=>{
-try {
-	const {email,password}=req.body
-	const user=await User.findOne({email})
+// In your auth.controller.js
+export const loginController = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+        // 1. First check if email exists with a simple count
+        const userExists = await User.exists({ email });
+        if (!userExists) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
 
+        // 2. If exists, fetch with password
+        const user = await User.findOne({ email })
+            .select('+password')
+            .maxTimeMS(30000); // Increase timeout to 30 seconds
 
-	if(user&&await user.comparePassword(password)){
-		const {accessToken,refreshToken}=generateTokens(user._id)
-		await storeRefreshToken(user._id,refreshToken)
-		setCookies(res,accessToken,refreshToken)
-		res.status(200).json({
-			_id:user._id,
-			name:user.name,
-			email:user.email,
-			role:user.role
-		  })
-	}else{
-		res.status(401).json({ message: "Invalid credentials" });
-	}
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
 
-  
-} catch (error) {
-	log('Error in login controller:', error.message)
-	res.status(500).json({ message: `Internal server error: ${error.message}` })
-}
-}
+        // 3. Compare password
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        // Rest of your login logic...
+        const { accessToken, refreshToken } = generateTokens(user._id);
+        await storeRefreshToken(user._id, refreshToken);
+        setCookies(res, accessToken, refreshToken);
+
+        // Remove password from response
+        const userResponse = user.toObject();
+        delete userResponse.password;
+
+        res.status(200).json(userResponse);
+
+    } catch (error) {
+        console.error('Login error:', {
+            message: error.message,
+            name: error.name,
+            stack: error.stack
+        });
+        res.status(500).json({ 
+            message: 'Internal server error',
+            error: error.message 
+        });
+    }
+};
 export const logOutController=async(req,res)=>{
    try {
 		const refreshToken = req.cookies.refreshToken;
