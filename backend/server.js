@@ -26,8 +26,11 @@ app.use('/api/cart',cartRoutes)
 app.use('/api/coupons',couponRoutes)
 app.use('/api/payments',paymentRoutes)
 app.use('/api/analytics',analyticsRoutes)
+dbConnect();
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
-app.listen(PORT,()=>{
-    log(`Server is running on port ${PORT}`)
-    dbConnect()
-})
