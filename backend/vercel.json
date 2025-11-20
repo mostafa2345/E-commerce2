@@ -12,17 +12,7 @@
       "src": "/(.*)",
       "dest": "/server.js"
     }
-  ],
-    "env": {
-    "MONGODB_URI": "@mongodb-uri",
-    "ACCESS_TOKEN_SECRET": "@access-token-secret",
-    "REFRESH_TOKEN_SECRET": "@refresh-token-secret",
-    "CLOUDINARY_CLOUD_NAME": "@cloudinary-cloud-name",
-    "CLOUDINARY_API_KEY": "@cloudinary-api-key",
-    "CLOUDINARY_API_SECRET": "@cloudinary-api-secret",
-    "STRIPE_PK": "@stripe-pk",
-    "STRIPE_SK": "@stripe-sk",
-    "CLIENT_URL": "@client-url"
-  }
+  ]
+ 
  
 }
